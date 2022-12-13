@@ -10,16 +10,55 @@ import {
 	Navbar,
 	Panel,
 	FlexboxGrid,
+	Message,
 } from 'rsuite';
 import api from './services/api';
 import jwt_decode from 'jwt-decode';
+import './App.css';
+import Warning from './assets/warning.png';
 
 interface loginRequest {
 	email: string;
 	password: string;
 }
 
-const App = () => {
+import * as React from 'react';
+import { Routes, Route, Outlet, Link } from 'react-router-dom';
+
+export default function App() {
+	return (
+		<Routes>
+			<Route path="/" element={<Layout />}>
+				<Route index element={<Home />} />
+				<Route path="about" element={<About />} />
+				<Route path="dashboard" element={<Dashboard />} />
+				<Route path="*" element={<NoMatch />} />
+			</Route>
+		</Routes>
+	);
+}
+
+function Layout() {
+	return (
+		<div>
+			<Header style={{ marginBottom: 50 }}>
+				<Navbar appearance="inverse">
+					<Navbar.Brand>
+						<a
+							style={{ color: '#fff' }}
+							href="https://github.com/ViniciusMirandaDev"
+						>
+							Vinícius Miranda Baptista
+						</a>
+					</Navbar.Brand>
+				</Navbar>
+			</Header>
+			<Outlet />
+		</div>
+	);
+}
+
+function Home() {
 	const [form, setForm] = useState<loginRequest>();
 	const [email, setEmail] = useState();
 	const [password, setPassword] = useState();
@@ -46,18 +85,6 @@ const App = () => {
 	return (
 		<div className="show-fake-browser login-page">
 			<Container>
-				<Header style={{ marginBottom: 50 }}>
-					<Navbar appearance="inverse">
-						<Navbar.Brand>
-							<a
-								style={{ color: '#fff' }}
-								href="https://github.com/ViniciusMirandaDev"
-							>
-								Vinícius Miranda Baptista
-							</a>
-						</Navbar.Brand>
-					</Navbar>
-				</Header>
 				<Content>
 					<FlexboxGrid justify="center">
 						<FlexboxGrid.Item colspan={12}>
@@ -103,6 +130,34 @@ const App = () => {
 			</Container>
 		</div>
 	);
-};
+}
 
-export default App;
+function About() {
+	return (
+		<div>
+			<h2>About</h2>
+		</div>
+	);
+}
+
+function Dashboard() {
+	return (
+		<div>
+			<h2>Dashboard</h2>
+		</div>
+	);
+}
+
+function NoMatch() {
+	return (
+		<div className="error-div">
+			<Message type="info">
+				<h2>404, Unauthorized</h2>
+			</Message>
+			<img src={Warning} />
+			<p>
+				<Link to="/">Go to the home page</Link>
+			</p>
+		</div>
+	);
+}
