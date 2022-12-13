@@ -21,36 +21,26 @@ interface loginRequest {
 
 const App = () => {
 	const [form, setForm] = useState<loginRequest>();
-	const [email, setEmail] = useState('');
-	const [password, setPassword] = useState('');
+	const [email, setEmail] = useState();
+	const [password, setPassword] = useState();
 
-	const handleEmailChange = (e: ChangeEvent<HTMLInputElement>) => {
-		setEmail(e);
+	const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		//setEmail(e.target.value);
 	};
 
-	const handlePasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
-		setPassword(e);
+	const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		//setPassword(e.target.value);
 	};
 
 	const handleSubmit = async () => {
-		setForm({ email: email, password: password });
+		//setForm({ email: email, password: password });
 		var request = await api.post('/Authentication/login', form);
 		var json = await request.data;
 
 		localStorage.setItem('token', json.token);
-		var ok: string = localStorage.getItem('token') || '';
+		//var ok: string = localStorage.getItem('token');
 
 		var oks = jwt_decode(ok);
-		console.log(
-			new Date(oks.exp).getMilliseconds(),
-			new Date().getMilliseconds()
-		);
-
-		if (new Date(oks.exp).valueOf < new Date().getTime().valueOf) {
-			console.log('venceu');
-		} else {
-			console.log('ta em dia fi');
-		}
 	};
 
 	return (
