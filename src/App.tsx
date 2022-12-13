@@ -40,7 +40,7 @@ const App = () => {
 		localStorage.setItem('token', json.token);
 		//var ok: string = localStorage.getItem('token');
 
-		var oks = jwt_decode(ok);
+		//var oks = jwt_decode(ok);
 	};
 
 	return (
@@ -67,7 +67,7 @@ const App = () => {
 										<Form.ControlLabel>Email address</Form.ControlLabel>
 										<Form.Control
 											value={email}
-											onChange={(e) => handleEmailChange(e)}
+											//onChange={(e) => handleEmailChange(e)}
 											name="email"
 										/>
 									</Form.Group>
@@ -78,7 +78,7 @@ const App = () => {
 											type="password"
 											autoComplete="off"
 											value={password}
-											onChange={(e) => handlePasswordChange(e)}
+											//onChange={(e) => handlePasswordChange(e)}
 										/>
 									</Form.Group>
 									<Form.Group>
