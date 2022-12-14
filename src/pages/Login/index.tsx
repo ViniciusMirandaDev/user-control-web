@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import {
 	Container,
 	Content,
@@ -14,6 +14,7 @@ import {
 } from 'rsuite';
 import Swal from 'sweetalert2';
 import api from '../../services/api';
+import jwt_decode from 'jwt-decode';
 
 const { StringType, NumberType } = Schema.Types;
 
@@ -37,17 +38,35 @@ const TextField = React.forwardRef((props, ref) => {
 function Login() {
 	const formRef = useRef();
 	const navigate = useNavigate();
+	const [loading, setLoading] = useState(false);
 	const [formError, setFormError] = useState({});
 	const [formValue, setFormValue] = useState({
 		email: '',
 		password: '',
 	});
 
+	useEffect(() => {
+		let jwtToken = localStorage.getItem('token') || '';
+		let isTokenValid = false;
+		let token: any = null;
+		if (jwtToken != '') {
+			token = jwt_decode(jwtToken);
+			isTokenValid =
+				token.email != null && Date.now() >= token.exp * 1000 == false
+					? true
+					: false;
+		}
+		if (isTokenValid == true) {
+			navigate('/dashboard');
+		}
+	}, []);
+
 	const handleSubmit = async () => {
 		if (!formRef.current.check()) {
 			console.error('Form Error');
 			return;
 		}
+		setLoading(true);
 		try {
 			var request = await api.post('/Authentication/login', formValue);
 			var json = await request.data;
@@ -78,6 +97,8 @@ function Login() {
 				text: 'User or password incorrect!',
 			});
 			throw error;
+		} finally {
+			setLoading(false);
 		}
 	};
 
@@ -108,9 +129,16 @@ function Login() {
 										autoComplete="off"
 									/>
 									<ButtonToolbar>
-										<Button appearance="primary" onClick={handleSubmit}>
+										<Button
+											appearance="primary"
+											onClick={handleSubmit}
+											loading={loading}
+										>
 											Submit
 										</Button>
+										<Link to="/forgot-password">
+											<Button appearance="link">Forgot password?</Button>
+										</Link>
 									</ButtonToolbar>
 								</Form>
 							</Panel>

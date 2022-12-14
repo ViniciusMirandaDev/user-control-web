@@ -34,6 +34,7 @@ const TextField = React.forwardRef((props, ref) => {
 function ForgotPassword() {
 	const formRef = useRef();
 	const navigate = useNavigate();
+	const [loading, setLoading] = useState(false);
 	const [formError, setFormError] = useState({});
 	const [formValue, setFormValue] = useState({
 		email: '',
@@ -44,6 +45,7 @@ function ForgotPassword() {
 			console.error('Form Error');
 			return;
 		}
+		setLoading(true);
 		try {
 			await api.post(`/User/forgot-password?userEmail=${formValue.email}`);
 		} catch (error) {
@@ -51,15 +53,15 @@ function ForgotPassword() {
 				icon: 'error',
 				title: 'Oops...',
 				text: 'This email cannot be used!',
-			}).then(() => {
-				navigate('/');
 			});
 			throw error;
+		} finally {
+			setLoading(false);
 		}
 
 		Swal.fire(
 			'Good job!',
-			'Look the link to recovery in your email!',
+			'We have sent the link to your email! After clicking on button you will be redirected to login',
 			'success'
 		).then(() => {
 			navigate('/');

@@ -12,9 +12,12 @@ export default function App() {
 		<Routes>
 			<Route path="/" element={<Layout />}>
 				<Route index element={<Login />} />
-				<Route path="/forgotpassword" element={<ForgotPassword />} />
+				<Route path="/forgot-password" element={<ForgotPassword />} />
 				<Route path="dashboard" element={<Home />} />
-				<Route path="/forgotpassword/:token" element={<ForgotPasswordLink />} />
+				<Route
+					path="/forgot-password/:token"
+					element={<ForgotPasswordLink />}
+				/>
 				<Route path="*" element={<NotFound />} />
 			</Route>
 		</Routes>
