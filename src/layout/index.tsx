@@ -16,6 +16,9 @@ function Layout() {
 						<Link to="/" style={{ color: '#fff', marginLeft: 10 }}>
 							Login
 						</Link>
+						<Link to="/register" style={{ color: '#fff', marginLeft: 10 }}>
+							Register
+						</Link>
 					</Navbar.Brand>
 				</Navbar>
 			</Header>

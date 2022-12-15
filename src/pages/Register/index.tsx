@@ -23,6 +23,12 @@ import api from '../../services/api';
 const { StringType, NumberType } = Schema.Types;
 
 const model = Schema.Model({
+	name: StringType()
+		.isRequired('This field is required.')
+		.minLength(4, 'Name min is 4 characters'),
+	email: StringType()
+		.isEmail('Insert a valid email address')
+		.isRequired('This field is required.'),
 	password: StringType()
 		.isRequired('This field is required.')
 		.containsLowercaseLetter('Must have uppercaseLetter')
@@ -50,12 +56,14 @@ const TextField = React.forwardRef((props, ref) => {
 	);
 });
 
-function ForgotPasswordLink() {
+function Register() {
 	let { token } = useParams();
 	const formRef = React.useRef();
 	const navigate = useNavigate();
 	const [formError, setFormError] = React.useState({});
 	const [formValue, setFormValue] = React.useState({
+		name: '',
+		email: '',
 		password: '',
 		verifyPassword: '',
 	});
@@ -66,14 +74,16 @@ function ForgotPasswordLink() {
 			return;
 		}
 		try {
-			var request = await api.post(
-				`/User/${token}?newPassword=${formValue.password}`
-			);
+			var request = await api.post(`/User`, {
+				name: formValue.name,
+				email: formValue.email,
+				password: formValue.password,
+			});
 		} catch (error) {
 			Swal.fire({
 				icon: 'error',
 				title: 'Oops...',
-				text: 'This token already be used, we are going to redirect you to login!',
+				text: 'Or this user already exists your you cannot create at this moment, sorry!',
 			}).then(() => {
 				navigate('/');
 			});
@@ -81,7 +91,7 @@ function ForgotPasswordLink() {
 		}
 
 		Swal.fire({
-			title: 'Password changed!',
+			title: 'User created!',
 			html: 'You will go to login page now!',
 			timer: 2000,
 			timerProgressBar: true,
@@ -93,6 +103,7 @@ function ForgotPasswordLink() {
 			},
 		}).then((result) => {
 			if (result.dismiss === Swal.DismissReason.timer) {
+				localStorage.removeItem('token');
 				navigate('/');
 			}
 		});
@@ -107,11 +118,8 @@ function ForgotPasswordLink() {
 							<Panel
 								header={
 									<>
-										<h3>Insert your new password!</h3>
-										<p>
-											For your security, use one UpperCase and one LowerCase
-											letters
-										</p>
+										<h3>Create a new user!</h3>
+										<p>Create how much users you want to create!</p>
 									</>
 								}
 								bordered
@@ -123,6 +131,18 @@ function ForgotPasswordLink() {
 									formValue={formValue}
 									model={model}
 								>
+									<TextField
+										name="name"
+										label="Name"
+										type="text"
+										autoComplete="off"
+									/>
+									<TextField
+										name="email"
+										label="Email"
+										type="email"
+										autoComplete="off"
+									/>
 									<TextField
 										name="password"
 										label="Password"
@@ -154,4 +174,4 @@ function ForgotPasswordLink() {
 	);
 }
 
-export default ForgotPasswordLink;
+export default Register;

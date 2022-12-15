@@ -76,11 +76,10 @@ function ForgotPassword() {
 						<FlexboxGrid.Item align="middle">
 							<Panel
 								header={
-									<h3>
-										For your security,
-										<br /> password have to contains UpperCaseLetter and
-										LowerCaseLetter
-									</h3>
+									<>
+										<h3>Need new password?</h3>
+										<p>Please, enter your email to change your password.</p>
+									</>
 								}
 								bordered
 							>
